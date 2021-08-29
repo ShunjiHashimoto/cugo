@@ -1,0 +1,13 @@
+- hue_mn: 0
+- hue_mx: 30
+- sat_mn: 200
+- sat_mx: 255
+- value_mn: 50
+- value_mx: 255
+- bright_mn: 0
+- bright_mx: 0
+
+  # yellow 
+  # cv::Scalar(20, 50, 50, 0) , cv::Scalar(100, 255, 255, 0)
+  # white
+  #cv::Scalar(0, 0, 100, 0) , cv::Scalar(180, 45, 255, 0)
