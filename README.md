@@ -62,11 +62,11 @@ sudo apt-get install python-rpi.gpio
 
 ## 実行
 ### 収穫サポートを開始する
-- ssh "ユーザ名"@"IPアドレス"   
+- `ssh "ユーザ名"@"IPアドレス"`   
 例) ssh ubuntu@172.28.***.**  
 - パスワード入力   
-- source ~/.bashrc  
-- roslaunch cugo_bringup cugo_bringup.launch  
+- `source ~/.bashrc`  
+- `roslaunch cugo_bringup cugo_bringup.launch`  
 
 ### 操作方法
 - モード選択
@@ -74,11 +74,11 @@ sudo apt-get install python-rpi.gpio
     -  遠隔操作モードでは、Yボタンを押したぶん走行速度を上げられます、Aボタンを選択すると走行速度が下がります
 
 ### 赤色検出だけを行う
-- ssh "ユーザ名"@"IPアドレス"  
-例) ssh ubuntu@172.28.×××.××  
-- パスワード入力  
-- source ~/.bashrc  
-- roslaunch cugo_detection cugo_detection
+- `ssh "ユーザ名"@"IPアドレス"`   
+例) ssh ubuntu@172.28.***.**  
+- パスワード入力   
+- `source ~/.bashrc`  
+- `roslaunch cugo_detection cugo_detection.launch`  
 
 ## License
 
