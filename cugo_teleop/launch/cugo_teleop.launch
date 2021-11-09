@@ -5,6 +5,6 @@
     <param name="deadzone" value="0.12" />
   </node>
 
-  <node name="cubase" pkg="cubase" type="cubase.py" output="screen" />
+  <node name="cugo_teleop" pkg="cugo_teleop" type="cugo_teleop.py" output="screen" />
 
 </launch>

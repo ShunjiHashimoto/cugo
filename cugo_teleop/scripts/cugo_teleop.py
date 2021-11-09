@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-## object_detection_cubase & tele_operation!　##
+## object_detection_cugo & tele_operation!　##
 
 import rospy
 import time
@@ -52,59 +52,11 @@ class CugoController():
         self.joy_sub = rospy.Subscriber("joy", Joy, self.joyCallback, queue_size=1)
         
     def modeChange(self):
-        if self.main == 1:
-            ### old_teleop start 
+        if self.main == 0:
+            ### teleop start 
             motor_l = self.joy_l
             motor_r = self.joy_r
             
-            time.sleep(0.1)
-            
-            if motor_l > 0 and motor_r > 0:
-                GPIO.output(ENABLE_r, GPIO.LOW)
-                GPIO.output(ENABLE_l, GPIO.LOW)
-                p_r.ChangeDutyCycle(motor_l)
-                p_l.ChangeDutyCycle(motor_r)
-                print("go:", motor_l, motor_r)
-            
-            elif motor_l < 0 and motor_r < 0:
-                GPIO.output(ENABLE_r, GPIO.HIGH)
-                GPIO.output(ENABLE_l, GPIO.HIGH)
-                p_r.ChangeDutyCycle(-(motor_l))
-                p_l.ChangeDutyCycle(-(motor_r))
-                print("back:", motor_l, motor_r)
-            
-            else:
-                print("stop:", motor_l, motor_r)
-                p_r.stop()
-                p_l.stop()
-                p_r.start(0)
-                p_l.start(0)
-
-        elif self.main == 0:
-            ### new_teleop start
-            if(self.joy_r == -0):
-                self.joy_r = 0
-            if(self.joy_l == -0):
-                self.joy_l = 0
-
-            motor_l = self.joy_l
-            motor_r = self.joy_r
-            max = self.percent
-            ## 右回り
-            if(self.joy_r < 0):
-                if(self.joy_l > 0):
-                    motor_r  += (self.joy_l * self.joy_r)/max
-                else:
-                    motor_r -= self.joy_r
-            ## 左回り
-            elif(self.joy_r > 0):
-                if(self.joy_l > 0):
-                    motor_l -= (self.joy_r * self.joy_l) / max 
-                else:
-                    motor_l += self.joy_r 
-            else:
-                motor_l = self.joy_l
-                motor_r = self.joy_l
             time.sleep(0.1)
             
             if motor_l > 0 and motor_r > 0:
@@ -197,7 +149,7 @@ class CugoController():
         push = ((~self.btn) & newbtn)
         self.btn = newbtn
         if(push & BTN_BACK):
-            self.main = (self.main + 1)%3
+            self.main = (self.main + 1)%2
         elif(push & BTN_Y):
             self.percent += 10
         elif(push & BTN_A):

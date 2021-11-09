@@ -15,7 +15,7 @@
     <remap from="image" to="image_raw"/>
   </node>
 
-  <node name="cubase" pkg="cubase" type="cubase.py" output="screen" />
+  <node name="cugo_teleop" pkg="cugo_teleop" type="cugo_teleop.py" output="screen" />
 
   <node name="object_detection" pkg="cugo_detection" type="object_detection" output="screen">
     <param name = "hue_mn" type = "int" value="150"/>
