@@ -45,7 +45,6 @@ void ObjectDetection::publishStr(cv::Point2f center, float radius)
                 }
         }
         ROS_INFO("{x:%f, y:%f}", center.x, center.y);
-        // ROS_INFO("size:%d", cv_ptr->image.size().width);
         ROS_INFO("radius = %f", radius);
 }
 
@@ -65,13 +64,11 @@ int ObjectDetection::maxContours(std::vector<std::vector<cv::Point>> contours)
         }
         else
         {
-                ROS_INFO("target nothing!");
                 str.data = "stop";
                 msg_pub.publish(str);
         }
         if(max_area_contour == -1)
         {
-                ROS_INFO("target nothing( max_area )!");
                 str.data = "stop";
                 msg_pub.publish(str);
         }
@@ -112,7 +109,7 @@ void ObjectDetection::imageCb(const sensor_msgs::ImageConstPtr& msg)
         cv::threshold(gray_image, threshold_image, 80, 255, CV_THRESH_BINARY);
 
         // ウインドウに円を描画
-        //cv::circle(cv_ptr->image, cv::Point(100, 100), 20, CV_RGB(0,255,0));
+        cv::circle(cv_ptr->image, cv::Point(100, 100), 20, CV_RGB(0,255,0));
 
         // 輪郭を格納するcontoursにfindContours関数に渡すと輪郭を点の集合として入れてくれる
         std::vector<std::vector<cv::Point>> contours;
@@ -121,7 +118,7 @@ void ObjectDetection::imageCb(const sensor_msgs::ImageConstPtr& msg)
 
         // 最大面積を持つ輪郭の最小外接円を取得
         if(max_area_contour == -1) {
-                ROS_WARN("target nothing");
+                ROS_WARN("target nothing!!, please show red object");
                 return;
         }
         cv::minEnclosingCircle(contours.at(max_area_contour), center, radius);
