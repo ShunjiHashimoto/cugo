@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(cubase)
+project(cugo_teleop)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -22,7 +22,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 catkin_package(
 #  INCLUDE_DIRS include
-  LIBRARIES cubase
+  LIBRARIES cugo_teleop
   CATKIN_DEPENDS roscpp rospy std_msgs
   DEPENDS system_lib
 )

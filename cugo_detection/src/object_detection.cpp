@@ -1,38 +1,55 @@
 #include "object_detection.h"
 
-void ImageConverter::publishStr(cv::Point2f center, float radius)
+ObjectDetection::ObjectDetection()
+{
+        // カラー画像をサブスクライブ
+        image_sub_ = nh_.subscribe("/image_raw", 1, &ObjectDetection::imageCb, this);
+        // 処理した画像をパブリッシュ
+        msg_pub = nh_.advertise<std_msgs::String>("/msg_topic", 1, true);
+        // 赤色のしきい値を設定
+        nh_.getParam("/object_detection/hue_mn", hue_mn);
+        nh_.getParam("/object_detection/hue_mx", hue_mx);
+        nh_.getParam("/object_detection/sat_mn", sat_mn);
+        nh_.getParam("/object_detection/sat_mx", sat_mx);
+        nh_.getParam("/object_detection/value_mn", value_mn);
+        nh_.getParam("/object_detection/value_mx", value_mx);
+        nh_.getParam("/object_detection/bright_mn", bright_mn);
+        nh_.getParam("/object_detection/bright_mx", bright_mx);
+}
+
+void ObjectDetection::publishStr(cv::Point2f center, float radius)
 {
         if( 0 <= center.x && center.x <= 240)
         {
                 str.data = "turn left";
                 msg_pub.publish(str);
-                // ROS_INFO("turn left");
+                ROS_INFO("turn left");
         }
         else if( 400 < center.x && center.x <= 640)
         {
                 str.data = "turn right";
                 msg_pub.publish(str);
-                // ROS_INFO("turn right");
+                ROS_INFO("turn right");
         }
         else
         {
                 if(radius >= 130.0 || radius <= 10) {
                         str.data = "stop";
                         msg_pub.publish(str);
-                        // ROS_INFO("stop");
+                        ROS_INFO("stop");
                 }
                 else{
                         str.data = "go ahead";
                         msg_pub.publish(str);
-                        // ROS_INFO("go ahead");
+                        ROS_INFO("go ahead");
                 }
         }
-        // ROS_INFO("{x:%f, y:%f}", center.x, center.y);
+        ROS_INFO("{x:%f, y:%f}", center.x, center.y);
         // ROS_INFO("size:%d", cv_ptr->image.size().width);
-        // ROS_INFO("radius = %f", radius);
+        ROS_INFO("radius = %f", radius);
 }
 
-int ImageConverter::maxContours(std::vector<std::vector<cv::Point>> contours)
+int ObjectDetection::maxContours(std::vector<std::vector<cv::Point>> contours)
 {
         double max_area = 0;
         int max_area_contour = -1;
@@ -48,33 +65,24 @@ int ImageConverter::maxContours(std::vector<std::vector<cv::Point>> contours)
         }
         else
         {
-                // ROS_INFO("target nothing!");
+                ROS_INFO("target nothing!");
                 str.data = "stop";
                 msg_pub.publish(str);
         }
         if(max_area_contour == -1)
         {
-                // ROS_INFO("target nothing( max_area )!");
+                ROS_INFO("target nothing( max_area )!");
                 str.data = "stop";
                 msg_pub.publish(str);
         }
         return(max_area_contour);
 }
 
-void ImageConverter::imageCb(const sensor_msgs::ImageConstPtr& msg)
+void ObjectDetection::imageCb(const sensor_msgs::ImageConstPtr& msg)
 {
         cv::Point2f center, p1;
         cv_bridge::CvImagePtr cv_ptr,cv_edge;
         float radius;
-        nh_.getParam("/object_detection/hue_mn", hue_mn);
-        nh_.getParam("/object_detection/hue_mx", hue_mx);
-        nh_.getParam("/object_detection/sat_mn", sat_mn);
-        nh_.getParam("/object_detection/sat_mx", sat_mx);
-        nh_.getParam("/object_detection/value_mn", value_mn);
-        nh_.getParam("/object_detection/value_mx", value_mx);
-        nh_.getParam("/object_detection/bright_mn", bright_mn);
-        nh_.getParam("/object_detection/bright_mx", bright_mx);
-
         try
         {       // ROSからOpenCVの形式にtoCvCopy()で変換。cv_ptr->imageがcv::Matフォーマット
                 cv_ptr  = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
@@ -109,11 +117,13 @@ void ImageConverter::imageCb(const sensor_msgs::ImageConstPtr& msg)
         // 輪郭を格納するcontoursにfindContours関数に渡すと輪郭を点の集合として入れてくれる
         std::vector<std::vector<cv::Point>> contours;
         cv::findContours(threshold_image, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
-
-        int max_area_contour = ImageConverter::maxContours(contours);
+        int max_area_contour = ObjectDetection::maxContours(contours);
 
         // 最大面積を持つ輪郭の最小外接円を取得
-        if(max_area_contour == -1) return;
+        if(max_area_contour == -1) {
+                ROS_WARN("target nothing");
+                return;
+        }
         cv::minEnclosingCircle(contours.at(max_area_contour), center, radius);
         // 最小外接円を描画(画像、円の中心座標、半径、色、線の太さ)
         cv::circle(cv_ptr->image, center, radius, cv::Scalar(0,0,255),3,4);
@@ -128,8 +138,8 @@ void ImageConverter::imageCb(const sensor_msgs::ImageConstPtr& msg)
         cv::resize(bit_image, cv_half_image2,cv::Size(),0.75,0.75);
         cv::resize(cv_edge->image, cv_half_image3,cv::Size(),0.75,0.75);
         cv::resize(threshold_image, cv_half_image5,cv::Size(),0.75,0.75);
-        
-        ImageConverter::publishStr(center, radius);
+
+        ObjectDetection::publishStr(center, radius);
 
         cv::imshow("Original Image", cv_half_image);
         cv::imshow("Result Image", cv_half_image2);
@@ -141,7 +151,7 @@ void ImageConverter::imageCb(const sensor_msgs::ImageConstPtr& msg)
 int main(int argc, char** argv)
 {
         ros::init(argc, argv, "object_detection");
-        ImageConverter ic;
+        ObjectDetection ic;
         ros::spin();
         return 0;
 }

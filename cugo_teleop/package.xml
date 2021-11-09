@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>cubase</name>
+  <name>cugo_teleop</name>
   <version>0.0.0</version>
-  <description>The cubase package</description>
+  <description>The cugo_teleop package</description>
 
   <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
   <maintainer email="h.shunji1206@gmail.com"></maintainer>

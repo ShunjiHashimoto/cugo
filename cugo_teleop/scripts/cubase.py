@@ -210,7 +210,7 @@ class CugoController():
 
 def main():
     # start node
-    rospy.init_node("cubase", anonymous=True)
+    rospy.init_node("cugo_teleop", anonymous=True)
         
     instance = CugoController()
  
