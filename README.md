@@ -1,13 +1,13 @@
 # 収穫サポートロボット
 CuGo V3を使って収穫サポートロボットTANGを作る
 
-## 必要な開発環境
+# 必要な開発環境
 - Rapberry Pi 4
 - Ubuntu18.04が入ったPC
 - Webカメラ
 - CuGo V3 など
 
-## 必要なパッケージ
+# 必要なパッケージ
 ### Ubuntu serverをダウンロードし、SDカードに書き込む
 Ubuntu serverをダウンロード
 ```bash
@@ -60,7 +60,7 @@ sudo apt-get install ros-melodic-joy
 sudo apt-get install python-rpi.gpio
 ```
 
-## 実行
+# 実行
 ### 収穫サポートを開始する
 - ssh "ユーザ名"@"IPアドレス"   
 例) ssh ubuntu@172.28.***.**  
