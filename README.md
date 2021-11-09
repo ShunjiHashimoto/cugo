@@ -68,7 +68,12 @@ sudo apt-get install python-rpi.gpio
 - source ~/.bashrc  
 - roslaunch cugo_bringup cugo_bringup.launch  
 
-### 赤色検出を行う
+### 操作方法
+- モード選択
+    -  ゲームパッドのBackボタンを押すことで"遠隔操作モード", "赤色追従モード"に切り替えられます
+    -  遠隔操作モードでは、Yボタンを押したぶん走行速度を上げられます、Aボタンを選択すると走行速度が下がります
+
+### 赤色検出だけを行う
 - ssh "ユーザ名"@"IPアドレス"  
 例) ssh ubuntu@172.28.×××.××  
 - パスワード入力  
