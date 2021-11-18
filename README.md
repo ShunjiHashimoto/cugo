@@ -21,15 +21,7 @@ Raspberry Pi Imagerを使って書き込む
 書き込むimgファイルは先程選択したファイルを選択後、書き込む
 ![Screenshot from 2021-10-08 07-17-44](https://user-images.githubusercontent.com/63869336/136469821-0b4fd0a0-74e5-464a-93dd-b196089ea772.png)
 
-
-### Ubuntu
-```bash
-sudo apt update
-sudo apt upgrade
-sudo apt install xubuntu-desktop
-```
-
-### ROS
+### ROSをインストール
 ```bash
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 sudo apt install curl # if you haven't already installed curl
